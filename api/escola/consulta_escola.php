@@ -38,9 +38,9 @@ $htmlTabelaEscolas .= "<head>";
 // TITULOS DA TABLE
 $htmlTabelaEscolas .= "<tr>";
 $htmlTabelaEscolas .= "  <th>Código</th>";
-$htmlTabelaEscolas .= "  <th>Nome</th>";
-$htmlTabelaEscolas .= "  <th>E-mail</th>";
-$htmlTabelaEscolas .= "  <th>Senha</th>";
+$htmlTabelaEscolas .= "  <th>Descrição</th>";
+$htmlTabelaEscolas .= "  <th>Cidade</th>";
+// $htmlTabelaEscolas .= "  <th>Tipo Ensino</th>";
 $htmlTabelaEscolas .= "  <th colspan='2'>Ações</th>";
 $htmlTabelaEscolas .= "</tr>";
 

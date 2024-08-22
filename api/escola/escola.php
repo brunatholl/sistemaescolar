@@ -1,40 +1,40 @@
 <?php
 require_once("../core/header.php");
 
-function getDadosAluno($codigoAlunoAlterar){
-    $nome = "";
-    $email = "";
+function getDadosEscola($codigoEscolaAlterar){
+    $descricao = "";
+    $cidade = "";
 
-    // VAI BUSCAR OS DADOS DE ALUNO.JSON
-    $dadosAlunos = @file_get_contents("alunos.json");
+    // VAI BUSCAR OS DADOS DE Escola.JSON
+    $dadosEscola = @file_get_contents("Escola.json");
 
     // TRANSFORMAR EM ARRAY
-    $arDadosAlunos = json_decode($dadosAlunos, true);
+    $arDadosEscola = json_decode($dadosEscola, true);
 
-    $encontrouAluno = false;
-    foreach($arDadosAlunos as $aDados){
+    $encontrouEscola = false;
+    foreach($arDadosEscola as $aDados){
         $codigoAtual = $aDados["codigo"];
-        if($codigoAlunoAlterar == $codigoAtual){
-            $encontrouAluno = true;
-            $nome = $aDados["nome"];
-            $email = $aDados["email"];
+        if($codigoEscolaAlterar == $codigoAtual){
+            $encontrouEscola = true;
+            $descricao = $aDados["descricao"];
+            $cidade = $aDados["cidade"];
 
             // para a execução do loop
             break;
         }
     }
 
-    return array($nome, $email, $encontrouAluno);
+    return array($descricao, $cidade, $encontrouEscola);
 }
 
 // Verificar se existe acao
 $codigo = "";
-$nome = "";
-$email = "";
+$descricao = "";
+$cidade = "";
 $display = "block;";
 
-$encontrouAluno = false;
-$mensagemAlunoNaoEncontrado = "Não foi encontrado nenhum aluno para o codigo informado!Código: ";
+$encontrouEscola = false;
+$mensagemEscolaNaoEncontrado = "Não foi encontrado nenhum Escola para o codigo informado!Código: ";
 
 $acaoFormulario = "INCLUIR";
 if(isset($_GET["ACAO"])){
@@ -44,24 +44,24 @@ if(isset($_GET["ACAO"])){
 
         $display = "none;";
         $codigo = $_GET["codigo"];
-        list($nome, $email, $encontrouAluno) = getDadosAluno($codigo);
+        list($descricao, $cidade, $encontrouEscola) = getDadosEscola($codigo);
 
-        if($encontrouAluno){
+        if($encontrouEscola){
             // Limpa a mensagem de erro
-            $mensagemAlunoNaoEncontrado = "";
+            $mensagemEscolaNaoEncontrado = "";
         } else {
-            // Adiciona o codigo do aluno no fim
-            $mensagemAlunoNaoEncontrado .= $codigoAluno;
+            // Adiciona o codigo do Escola no fim
+            $mensagemEscolaNaoEncontrado .= $codigoEscola;
         }
     }
 }
 
 $sHTML = '<div> <link rel="stylesheet" href="../css/formulario.css">';
 
-// FORMULARIO DE CADASTRO DE ALUNOS
-$sHTML .= '<h2 style="text-align:center;">Formulário de Aluno</h2>
-    <h3>' . $mensagemAlunoNaoEncontrado . '</h3>
-    <form action="cadastrar_aluno.php" method="POST">
+// FORMULARIO DE CADASTRO DE Escola
+$sHTML .= '<h2 style="text-align:center;">Formulário de Escola</h2>
+    <h3>' . $mensagemEscolaNaoEncontrado . '</h3>
+    <form action="cadastrar_Escola.php" method="POST">
         <input type="hidden" id="ACAO" name="ACAO" value="' . $acaoFormulario . '">
 
         <label for="codigo">Código:</label>
@@ -69,7 +69,7 @@ $sHTML .= '<h2 style="text-align:center;">Formulário de Aluno</h2>
         <input type="text" id="codigoTela" name="codigoTela" value="' . $codigo . '" disabled>
 
         <label for="descricao">Descrição:</label>
-        <input type="text" id="descricao" name="descricao" required value="' . $nome . '">
+        <input type="text" id="descricao" name="descricao" required value="' . $descricao . '">
 
         <label for="cidade">Cidade:</label>
         <select id="cidade" name="cidade">
@@ -114,7 +114,7 @@ $sHTML .= '<h2 style="text-align:center;">Formulário de Aluno</h2>
         <input type="submit" value="Enviar">
     </form>';
 
-// CONSULTA DE ALUNOS
+// CONSULTA DE Escola
 $sHTML .= '</div>';
 
 echo $sHTML;

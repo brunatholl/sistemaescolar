@@ -1,9 +1,8 @@
 <?php
 function alterar_Escola(){
     $codigoEscolaAlterar = $_POST["codigo"];
-    $nome = $_POST["nome"];
+    $descricao = $_POST["descricao"];
     $cidade = $_POST["cidade"];
-    $email = $_POST["email"];
     
     $dadosEscola = @file_get_contents("Escola.json");
     $arDadosEscola = json_decode($dadosEscola, true);
@@ -13,9 +12,8 @@ function alterar_Escola(){
         $codigoAtual = $aDados["codigo"];
 
         if($codigoEscolaAlterar == $codigoAtual){
-            $aDados["nome"] = $nome;
+            $aDados["descricao"] = $descricao;
             $aDados["cidade"] = $cidade;
-            $aDados["email"] = $email;
         }
 
         $arDadosEscolaNovo[] = $aDados;
@@ -58,13 +56,38 @@ function incluir_Escola(){
         $arDadosEscola = json_decode($dadosEscola, true);
     }
 
+    $tipo_ensino_creche = 0;
+    $tipo_ensino_basico = 0;
+    $tipo_ensino_fundamental = 0;
+    $tipo_ensino_medio = 0;
+
+    /*
+     Creche
+2 - Ensino Básico
+3 - Ensino Fundamental
+4 - Ensino Médio
+5 - Ensino Profissionalizante
+6 - Ensino Técnico
+7 - Ensino Superior
+    */
+    if(isset($_POST['tipo_ensino_creche'])){
+        tipo_ensino_creche = 1;
+    }
+    if(isset($_POST['tipo_ensino_fundamental'])){
+        tipo_ensino_fundamental = 1;
+    }
+    if(isset($_POST['tipo_ensino_medio'])){
+        tipo_ensino_medio = 1;
+    }
+    
+    
     // Armazenar os dados do Escola atual, num array associativo
+
 
     $aDadosEscolaAtual = array();
     $aDadosEscolaAtual["codigo"] = getProximoCodigo($arDadosEscola);
-    $aDadosEscolaAtual["nome"] = $_POST["nome"];
+    $aDadosEscolaAtual["descricao"] = $_POST["descricao"];
     $aDadosEscolaAtual["cidade"] = $_POST["cidade"];
-    $aDadosEscolaAtual["email"] = $_POST["email"];
     // $aDadosEscolaAtual["senha"] = password_hash($_POST["senha"], PASSWORD_DEFAULT);
 
     // Pega os dados atuais do Escola e armazena no array que foi lido
