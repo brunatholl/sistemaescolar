@@ -1,21 +1,21 @@
 <?php
 require_once("../core/header.php");
 
-function getDadosAluno($codigoAlunoAlterar){
+function getDadosProfessor($codigoProfessorAlterar){
     $nome = "";
     $email = "";
 
-    // VAI BUSCAR OS DADOS DE ALUNO.JSON
-    $dadosAlunos = @file_get_contents("alunos.json");
+    // VAI BUSCAR OS DADOS DE Professor.JSON
+    $dadosProfessors = @file_get_contents("Professors.json");
 
     // TRANSFORMAR EM ARRAY
-    $arDadosAlunos = json_decode($dadosAlunos, true);
+    $arDadosProfessors = json_decode($dadosProfessors, true);
 
-    $encontrouAluno = false;
-    foreach($arDadosAlunos as $aDados){
+    $encontrouProfessor = false;
+    foreach($arDadosProfessors as $aDados){
         $codigoAtual = $aDados["codigo"];
-        if($codigoAlunoAlterar == $codigoAtual){
-            $encontrouAluno = true;
+        if($codigoProfessorAlterar == $codigoAtual){
+            $encontrouProfessor = true;
             $nome = $aDados["nome"];
             $email = $aDados["email"];
 
@@ -24,7 +24,7 @@ function getDadosAluno($codigoAlunoAlterar){
         }
     }
 
-    return array($nome, $email, $encontrouAluno);
+    return array($nome, $email, $encontrouProfessor);
 }
 
 // Verificar se existe acao
@@ -33,8 +33,8 @@ $nome = "";
 $email = "";
 $display = "block;";
 
-$encontrouAluno = false;
-$mensagemAlunoNaoEncontrado = "Não foi encontrado nenhum aluno para o codigo informado!Código: ";
+$encontrouProfessor = false;
+$mensagemProfessorNaoEncontrado = "Não foi encontrado nenhum Professor para o codigo informado! Código: ";
 
 $acaoFormulario = "INCLUIR";
 if(isset($_GET["ACAO"])){
@@ -44,24 +44,24 @@ if(isset($_GET["ACAO"])){
 
         $display = "none;";
         $codigo = $_GET["codigo"];
-        list($nome, $email, $encontrouAluno) = getDadosAluno($codigo);
+        list($nome, $email, $encontrouProfessor) = getDadosProfessor($codigo);
 
-        if($encontrouAluno){
+        if($encontrouProfessor){
             // Limpa a mensagem de erro
-            $mensagemAlunoNaoEncontrado = "";
+            $mensagemProfessorNaoEncontrado = "";
         } else {
-            // Adiciona o codigo do aluno no fim
-            $mensagemAlunoNaoEncontrado .= $codigoAluno;
+            // Adiciona o codigo do Professor no fim
+            $mensagemProfessorNaoEncontrado .= $codigoProfessor;
         }
     }
 }
 
 $sHTML = '<div> <link rel="stylesheet" href="../css/formulario.css">';
 
-// FORMULARIO DE CADASTRO DE ALUNOS
-$sHTML .= '<h2 style="text-align:center;">Formulário de Aluno</h2>
-    <h3>' . $mensagemAlunoNaoEncontrado . '</h3>
-    <form action="cadastrar_aluno.php" method="POST">
+// FORMULARIO DE CADASTRO DE ProfessorS
+$sHTML .= '<h2 style="text-align:center;">Formulário de Professor</h2>
+    <h3>' . $mensagemProfessorNaoEncontrado . '</h3>
+    <form action="cadastrar_Professor.php" method="POST">
         <input type="hidden" id="ACAO" name="ACAO" value="' . $acaoFormulario . '">
 
         <label for="codigo">Código:</label>
@@ -82,7 +82,7 @@ $sHTML .= '<h2 style="text-align:center;">Formulário de Aluno</h2>
         <input type="submit" value="Enviar">
     </form>';
 
-// CONSULTA DE ALUNOS
+// CONSULTA DE ProfessorS
 $sHTML .= '</div>';
 
 echo $sHTML;
