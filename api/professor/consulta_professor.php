@@ -12,7 +12,6 @@ function getAcaoExcluirProfessor($codigoProfessor){
 
 function getAcaoAlterarProfessor($codigoProfessor){
     $sHTML = "<a id='acaoAlterar' href='http://localhost/sistemaescolar/api/professor/cadastrar_professor.php?ACAO=ALTERAR&codigo=" . $codigoProfessor . "'>Alterar</a>";
-
     return $sHTML;
 }
 

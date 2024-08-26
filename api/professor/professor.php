@@ -6,13 +6,15 @@ function getDadosProfessor($codigoProfessorAlterar){
     $email = "";
 
     // VAI BUSCAR OS DADOS DE Professor.JSON
-    $dadosProfessors = @file_get_contents("Professors.json");
+    $dadosProfessor = @file_get_contents("professor.json");
 
     // TRANSFORMAR EM ARRAY
-    $arDadosProfessors = json_decode($dadosProfessors, true);
+    $arDadosProfessor = json_decode($dadosProfessor, true);
+    // echo  "<pre>" . print_r($arDadosProfessor, true) . "</pre>";
+    // return true;
 
     $encontrouProfessor = false;
-    foreach($arDadosProfessors as $aDados){
+    foreach($arDadosProfessor as $aDados){
         $codigoAtual = $aDados["codigo"];
         if($codigoProfessorAlterar == $codigoAtual){
             $encontrouProfessor = true;
@@ -51,7 +53,7 @@ if(isset($_GET["ACAO"])){
             $mensagemProfessorNaoEncontrado = "";
         } else {
             // Adiciona o codigo do Professor no fim
-            $mensagemProfessorNaoEncontrado .= $codigoProfessor;
+            $mensagemProfessorNaoEncontrado .= $codigo;
         }
     }
 }
