@@ -90,7 +90,7 @@ $selected_5 = "";
 $selected_6 = "";
 
 $encontrouEscola = false;
-$mensagemEscolaNaoEncontrada = "Não foi encontrado nenhuma escola para o codigo informado!Código: ";
+$mensagemEscolaNaoEncontrada = "";
 
 $acaoFormulario = "INCLUIR";
 if(isset($_GET["ACAO"])){
@@ -111,40 +111,41 @@ if(isset($_GET["ACAO"])){
             $tipo_ensino_tecnico,
             $tipo_ensino_superior,
             $encontrouEscola) = getDadosEscola($codigo);
-
-        switch($cidade){
-            case 1:
-                $selected_1 = " selected ";
-                break;
-            case 2:
-                $selected_2 = " selected ";
-                break;
-            case 3:
-                $selected_3 = " selected ";
-                break;
-            case 4:
-                $selected_4 = " selected ";
-                break;
-            case 5:
-                $selected_5 = " selected ";
-                break;
-            case 6:
+            
+            switch($cidade){
+                case 1:
+                    $selected_1 = " selected ";
+                    break;
+                    case 2:
+                        $selected_2 = " selected ";
+                        break;
+                        case 3:
+                            $selected_3 = " selected ";
+                            break;
+                            case 4:
+                                $selected_4 = " selected ";
+                                break;
+                                case 5:
+                                    $selected_5 = " selected ";
+                                    break;
+                                    case 6:
                 $selected_6 = " selected ";
                 break;
-        }
+            }
 
-
-        if($encontrouEscola){
-            // Limpa a mensagem de erro
-            $mensagemEscolaNaoEncontrada = "";
-        } else {
-            // Adiciona o codigo da escola no fim
-            $mensagemEscolaNaoEncontrada .= $codigoEscola;
+            
+            if($encontrouEscola){
+                // Limpa a mensagem de erro
+                $mensagemEscolaNaoEncontrada = "";
+            } else {
+                // Adiciona o codigo da escola no fim
+                $mensagemEscolaNaoEncontrada = "Não foi encontrado nenhuma escola para o codigo informado!Código: ";
+                $mensagemEscolaNaoEncontrada .= $codigoEscola;
+            }
         }
     }
-}
-
-$sHTML = '<div> <link rel="stylesheet" href="../css/formulario.css">';
+    
+    $sHTML = '<div> <link rel="stylesheet" href="../css/formulario.css">';
 
 // FORMULARIO DE CADASTRO DE ALUNOS
 $sHTML .= '<h2 style="text-align:center;">Formulário de Escola</h2>

@@ -34,23 +34,24 @@ $email = "";
 $display = "block;";
 
 $encontrouAluno = false;
-$mensagemAlunoNaoEncontrado = "Não foi encontrado nenhum aluno para o codigo informado!Código: ";
+$mensagemAlunoNaoEncontrado = "";
 
 $acaoFormulario = "INCLUIR";
 if(isset($_GET["ACAO"])){
     $acao = $_GET["ACAO"];
     if($acao == "ALTERAR"){
         $acaoFormulario = "ALTERAR";
-
+        
         $display = "none;";
         $codigo = $_GET["codigo"];
         list($nome, $email, $encontrouAluno) = getDadosAluno($codigo);
-
+        
         if($encontrouAluno){
             // Limpa a mensagem de erro
             $mensagemAlunoNaoEncontrado = "";
         } else {
             // Adiciona o codigo do aluno no fim
+            $mensagemAlunoNaoEncontrado = "Não foi encontrado nenhum aluno para o codigo informado!Código: ";
             $mensagemAlunoNaoEncontrado .= $codigoAluno;
         }
     }

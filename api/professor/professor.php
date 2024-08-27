@@ -36,23 +36,24 @@ $email = "";
 $display = "block;";
 
 $encontrouProfessor = false;
-$mensagemProfessorNaoEncontrado = "Não foi encontrado nenhum Professor para o codigo informado! Código: ";
+$mensagemProfessorNaoEncontrado = "";
 
 $acaoFormulario = "INCLUIR";
 if(isset($_GET["ACAO"])){
     $acao = $_GET["ACAO"];
     if($acao == "ALTERAR"){
         $acaoFormulario = "ALTERAR";
-
+        
         $display = "none;";
         $codigo = $_GET["codigo"];
         list($nome, $email, $encontrouProfessor) = getDadosProfessor($codigo);
-
+        
         if($encontrouProfessor){
             // Limpa a mensagem de erro
             $mensagemProfessorNaoEncontrado = "";
         } else {
             // Adiciona o codigo do Professor no fim
+            $mensagemProfessorNaoEncontrado = "Não foi encontrado nenhum Professor para o codigo informado! Código: ";
             $mensagemProfessorNaoEncontrado .= $codigo;
         }
     }
