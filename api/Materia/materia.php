@@ -3,56 +3,62 @@ codigo
 descricao
 Curso - código do curso - COMBOBOX -->
 
-
 <?php
 require_once("../core/header.php");
 
-function getDadosMateria($codigoAlterar){
+
+function getComboTurma($codigoTurma = false){
+    $arDadosTurmas = array();
+    $dadosTurmas = @file_get_contents("../turma/turma.json");
+    if($dadosTurmas){
+        // transforma os dados lidos em ARRAY, que estavam em JSON
+        $arDadosTurmas = json_decode($dadosTurmas, true);
+    }
+
+    $html = '<div style="display:flex;gap:5px;flex-direction:row;">';
+
+    $html .= '  <label for="turma">Turma:</label>';
+    $html .= '  <select id="turma" name="turma">';
+    $html .= '    <option value="0">Selecione</option>';
+
+    //  preencher com php - mais options de ESCOLA
+    foreach($arDadosTurmas as $aDados){
+        $selected = "";
+        if($codigoTurma == $aDados["codigo"]){
+            $selected = " selected ";                    
+        }
+
+        $html .= '<option value="'. $aDados["codigo"] .'" ' . $selected .'>' . $aDados["descricao"] . '</option>';
+    }
+
+    $html .= '</select>';
+    $html .= '</div>';
+
+    return $html;
+}
+
+
+
+function getDadosMateria($codigoMateriaAlterar){
+    $codigomateria = "";
     $descricao = "";
-    $curso = "";
 
-    $dados = @file_get_contents("escola.json");
-
+    // VAI BUSCAR OS DADOS DE Professor.JSON
+    $dadosMaterias = @file_get_contents("materia.json");
     // TRANSFORMAR EM ARRAY
-    $arDados = json_decode($dados, true);
+    $dadosMaterias = json_decode($dadosMaterias, true);
+    // para testar
+    // echo  "<pre>" . print_r($arDadosProfessor, true) . "</pre>";
+    // return true;
 
-    $tipo_ensino_creche="";
-    $tipo_ensino_basico = "";
-    $tipo_ensino_fundamental = "";    
-    $tipo_ensino_medio = "";
-    $tipo_ensino_profissional = "";
-    $tipo_ensino_tecnico = "";
-    $tipo_ensino_superior = "";
-
-    $encontrouEscola = false;
-    foreach($arDados as $aDados){
+    $encontrouMateria = false;
+    foreach($dadosMaterias as $aDados){
         $codigoAtual = $aDados["codigo"];
-        if($codigoAlterar == $codigoAtual){
-            $encontrouEscola = true;
+        if($codigoMateriaAlterar == $codigoAtual){
+            $encontrouMateria = true;
+            $turma = $aDados["turma"];
             $descricao = $aDados["descricao"];
-            $cidade = $aDados["cidade"];
-            
-            if($aDados["tipo_ensino_creche"] == 1){
-                $tipo_ensino_creche = " checked ";
-            }
-            if($aDados["tipo_ensino_basico"] == 1){
-                $tipo_ensino_basico = " checked ";
-            }
-            if($aDados["tipo_ensino_fundamental"] == 1){
-                $tipo_ensino_fundamental = " checked ";
-            }
-            if($aDados["tipo_ensino_medio"] == 1){
-                $tipo_ensino_medio = " checked ";
-            }
-            if($aDados["tipo_ensino_profissional"] == 1){
-                $tipo_ensino_profissional = " checked ";
-            }
-            if($aDados["tipo_ensino_tecnico"] == 1){
-                $tipo_ensino_tecnico = " checked ";
-            }
-            if($aDados["tipo_ensino_superior"] == 1){
-                $tipo_ensino_superior = " checked ";
-            }
+            // duvida sobre alterar combo box da turma selecionada
 
             // para a execução do loop
             break;
@@ -60,155 +66,71 @@ function getDadosMateria($codigoAlterar){
     }
 
     return array(
-        $descricao,
-        $cidade,
-        $tipo_ensino_creche,
-        $tipo_ensino_basico,
-        $tipo_ensino_fundamental,
-        $tipo_ensino_medio,
-        $tipo_ensino_profissional,
-        $tipo_ensino_tecnico,
-        $tipo_ensino_superior,
-        $encontrouEscola
+        $descricao, 
+        $turma, 
+        $encontrouMateria
     );
 }
 
 // Verificar se existe acao
-$codigo = "";
+$codigomateria = "";
+$turma = "";
 $descricao = "";
-$cidade = "";
+$display = "block;";
 
-// TIPOS DE ENSINO 
-$tipo_ensino_creche = "";
-$tipo_ensino_basico = "";
-$tipo_ensino_fundamental = "";
-$tipo_ensino_medio = "";
-$tipo_ensino_profissional = "";
-$tipo_ensino_tecnico = "";
-$tipo_ensino_superior = "";
+$encontrouMateria = false;
+$mensagemMateriaNaoEncontrado = "";
 
-// CIDADES
-$selected_1 = "";
-$selected_2 = "";
-$selected_3 = "";
-$selected_4 = "";
-$selected_5 = "";
-$selected_6 = "";
-
-$encontrouEscola = false;
-$mensagemEscolaNaoEncontrada = "";
-
+$codigoTurma = false;
 $acaoFormulario = "INCLUIR";
 if(isset($_GET["ACAO"])){
     $acao = $_GET["ACAO"];
     if($acao == "ALTERAR"){
         $acaoFormulario = "ALTERAR";
-
+        
         $display = "none;";
-        $codigo = $_GET["codigo"];
-        list(
-            $descricao,
-            $cidade,
-            $tipo_ensino_creche,
-            $tipo_ensino_basico,
-            $tipo_ensino_fundamental,
-            $tipo_ensino_medio,
-            $tipo_ensino_profissional,
-            $tipo_ensino_tecnico,
-            $tipo_ensino_superior,
-            $encontrouEscola) = getDadosEscola($codigo);
-            
-            switch($cidade){
-                case 1:
-                    $selected_1 = " selected ";
-                    break;
-                    case 2:
-                        $selected_2 = " selected ";
-                        break;
-                        case 3:
-                            $selected_3 = " selected ";
-                            break;
-                            case 4:
-                                $selected_4 = " selected ";
-                                break;
-                                case 5:
-                                    $selected_5 = " selected ";
-                                    break;
-                                    case 6:
-                $selected_6 = " selected ";
-                break;
-            }
-
-            
-            if($encontrouEscola){
-                // Limpa a mensagem de erro
-                $mensagemEscolaNaoEncontrada = "";
-            } else {
-                // Adiciona o codigo da escola no fim
-                $mensagemEscolaNaoEncontrada = "Não foi encontrado nenhuma escola para o codigo informado!Código: ";
-                $mensagemEscolaNaoEncontrada .= $codigoEscola;
-            }
+        $codigoMateria = $_GET["codigo"];
+        list($codigoTurma, $codigoMateria, $descricao, $encontrouMateria) = getDadosMateria($codigoMateria);
+        
+        if($encontrouMateria){
+            // Limpa a mensagem de erro
+            $mensagemMateriaNaoEncontrado = "";
+        } else {
+            // Adiciona o codigo do Professor no fim
+            $mensagemMateriaNaoEncontrado = "Não foi encontrado nenhuma Materia para o codigo informado! Código: ";
+            $mensagemMateriaNaoEncontrado .= $codigo;
         }
     }
-    
-    $sHTML = '<div> <link rel="stylesheet" href="../css/formulario.css">';
+}
 
-// FORMULARIO DE CADASTRO DE ALUNOS
-$sHTML .= '<h2 style="text-align:center;">Formulário de Escola</h2>
-    <h3>' . $mensagemEscolaNaoEncontrada . '</h3>
-    <form action="cadastrar_escola.php" method="POST">
+$sHTML = '<div> <link rel="stylesheet" href="../css/formulario.css">';
+
+// $comboTurma = getComboTurma($codigoTurma);
+
+// FORMULARIO DE CADASTRO DE Materia
+$sHTML .= '<h2 style="text-align:center;">Formulário de Materia</h2>
+    <h3>' . $mensagemMateriaNaoEncontrado . '</h3>
+    <form action="cadastrar_Materia.php" method="POST">
         <input type="hidden" id="ACAO" name="ACAO" value="' . $acaoFormulario . '">
 
+        
         <label for="codigo">Código:</label>
-        <input type="hidden" id="codigo" name="codigo" value="' . $codigo . '" required>
-        <input type="text" id="codigoTela" name="codigoTela" value="' . $codigo . '" disabled>
+        <input type="hidden" id="codigo" name="codigo" value="' . $codigoMateria . '" required>
+        <input type="text" id="codigoTela" name="codigoTela" value="' . $codigoMateria . '" disabled>
+        
+        ' . $comboTurma . '
 
         <label for="descricao">Descrição:</label>
         <input type="text" id="descricao" name="descricao" required value="' . $descricao . '">
 
-        <label for="cidade">Cidade:</label>
-        <select id="cidade" name="cidade">
-            <option value="1" ' . $selected_1 . '>Rio do Sul</option>
-            <option value="2" ' . $selected_2 . '>Ibirama</option>
-            <option value="3" ' . $selected_3 . '>Ituporanga</option>
-            <option value="4" ' . $selected_4 . '>Joinvile</option>
-            <option value="5" ' . $selected_5 . '>Florianópolis</option>
-            <option value="6" ' . $selected_6 . '>Blumenau</option>
-        </select> 
-        <br>      
-        <br>      
-        
-        <label for="">Tipo Ensino:</label>
-        
-        <div style="display:flex;width:85%;flex-wrap:wrap;">
-            <label for="tipo_ensino_creche">Creche:</label>
-            <input type="checkbox" id="tipo_ensino_creche" name="tipo_ensino_creche" ' . $tipo_ensino_creche . '>
-            
-            <label for="tipo_ensino_basico">Básico:</label>
-            <input type="checkbox" id="tipo_ensino_basico" name="tipo_ensino_basico" ' . $tipo_ensino_basico . '>
-            
-            <label for="tipo_ensino_fundamental">Fundamental:</label>
-            <input type="checkbox" id="tipo_ensino_fundamental" name="tipo_ensino_fundamental" ' . $tipo_ensino_fundamental . '>
-                        
-            <label for="tipo_ensino_medio">Médio:</label>
-            <input type="checkbox" id="tipo_ensino_medio" name="tipo_ensino_medio" ' . $tipo_ensino_medio . '>
-            
-            <label for="tipo_ensino_profissional">Profissional:</label>
-            <input type="checkbox" id="tipo_ensino_profissional" name="tipo_ensino_profissional" ' . $tipo_ensino_profissional . '>
-            
-            <label for="tipo_ensino_tecnico">Técnico:</label>
-            <input type="checkbox" id="tipo_ensino_tecnico" name="tipo_ensino_tecnico" ' . $tipo_ensino_tecnico . '>
 
-            <label for="tipo_ensino_superior">Superior:</label>
-            <input type="checkbox" id="tipo_ensino_superior" name="tipo_ensino_superior" ' . $tipo_ensino_superior . '>
-        <div>
-
-        <br>      
-        <br> 
+        <div style="display:' . $display . ';">
+        </div>
 
         <input type="submit" value="Enviar">
     </form>';
 
+// CONSULTA DE ProfessorS
 $sHTML .= '</div>';
 
 echo $sHTML;
