@@ -9,7 +9,7 @@ require_once("../core/header.php");
 
 function getComboTurma($codigoTurma = false){
     $arDadosTurmas = array();
-    $dadosTurmas = @file_get_contents("../turma/turma.json");
+    $dadosTurmas = @file_get_contents("../turma/turmas.json");
     if($dadosTurmas){
         // transforma os dados lidos em ARRAY, que estavam em JSON
         $arDadosTurmas = json_decode($dadosTurmas, true);
@@ -28,7 +28,7 @@ function getComboTurma($codigoTurma = false){
             $selected = " selected ";                    
         }
 
-        $html .= '<option value="'. $aDados["codigo"] .'" ' . $selected .'>' . $aDados["descricao"] . '</option>';
+        $html .= '<option value="'. $aDados["codigo"] .'" ' . $selected .'>' . $aDados["nome"] . '</option>';
     }
 
     $html .= '</select>';
@@ -40,7 +40,7 @@ function getComboTurma($codigoTurma = false){
 
 
 function getDadosMateria($codigoMateriaAlterar){
-    $codigomateria = "";
+    $codigoMateria = "";
     $descricao = "";
 
     // VAI BUSCAR OS DADOS DE Professor.JSON
@@ -73,7 +73,7 @@ function getDadosMateria($codigoMateriaAlterar){
 }
 
 // Verificar se existe acao
-$codigomateria = "";
+$codigoMateria = "";
 $turma = "";
 $descricao = "";
 $display = "block;";
@@ -105,12 +105,12 @@ if(isset($_GET["ACAO"])){
 
 $sHTML = '<div> <link rel="stylesheet" href="../css/formulario.css">';
 
-// $comboTurma = getComboTurma($codigoTurma);
+$comboTurma = getComboTurma($codigoTurma);
 
 // FORMULARIO DE CADASTRO DE Materia
 $sHTML .= '<h2 style="text-align:center;">Formulário de Materia</h2>
     <h3>' . $mensagemMateriaNaoEncontrado . '</h3>
-    <form action="cadastrar_Materia.php" method="POST">
+    <form action="cadastrar_materia.php" method="POST">
         <input type="hidden" id="ACAO" name="ACAO" value="' . $acaoFormulario . '">
 
         
@@ -119,7 +119,7 @@ $sHTML .= '<h2 style="text-align:center;">Formulário de Materia</h2>
         <input type="text" id="codigoTela" name="codigoTela" value="' . $codigoMateria . '" disabled>
         
         ' . $comboTurma . '
-
+<br>
         <label for="descricao">Descrição:</label>
         <input type="text" id="descricao" name="descricao" required value="' . $descricao . '">
 
